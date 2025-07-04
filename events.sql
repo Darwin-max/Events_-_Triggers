@@ -45,3 +45,28 @@ END;
 //
 
 DELIMITER ;
+
+
+
+-- 3. Alerta de Stock Bajo Única: en un futuro arranque del sistema (requerimiento del sistema), 
+-- generar una única pasada de alertas (`alerta_stock`) 
+-- de ingredientes con stock < 5, y luego autodestruir el evento.
+
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS ev_alerta_stock_unica
+ON SCHEDULE AT '2025-06-30 08:00:00' 
+ON COMPLETION NOT PRESERVE
+DO
+BEGIN
+    INSERT INTO alerta_stock (ingrediente_id, stock_actual, fecha_alerta)
+    SELECT
+        id,
+        stock,
+        NOW()
+    FROM ingrediente
+    WHERE stock < 5;
+END;
+//
+
+DELIMITER ;
