@@ -70,3 +70,26 @@ END;
 //
 
 DELIMITER ;
+
+-- 4. Monitoreo Continuo de Stock: cada 30 minutos, revisar ingredientes con stock < 10 e insertar alertas en `alerta_stock`,
+-- **dejando** el evento activo para siempre llamado `ev_monitor_stock_bajo`.
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS ev_monitor_stock_bajo
+ON SCHEDULE
+    EVERY 30 MINUTE
+    STARTS NOW()
+ON COMPLETION PRESERVE
+DO
+BEGIN
+    INSERT INTO alerta_stock (ingrediente_id, stock_actual, fecha_alerta)
+    SELECT
+        id,
+        stock,
+        NOW()
+    FROM ingrediente
+    WHERE stock < 10;
+END;
+//
+
+DELIMITER ;
