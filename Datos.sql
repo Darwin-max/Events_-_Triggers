@@ -1,4 +1,3 @@
--- Active: 1748978904024@@127.0.0.1@3307@Tigres
 
 INSERT INTO cliente (nombre, telefono, direccion) VALUES
 ('Juan Pérez', '3111111111', 'Calle 123 #45-67'),
