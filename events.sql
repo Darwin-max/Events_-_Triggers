@@ -93,3 +93,23 @@ END;
 //
 
 DELIMITER ;
+
+
+
+-- 5. Limpieza de Resúmenes Antiguos: una sola vez, eliminar de `resumen_ventas` 
+-- los registros con fecha anterior a hace 365 días y 
+-- luego borrar el evento llamado `ev_purgar_resumen_antiguo`.
+
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS ev_purgar_resumen_antiguo
+ON SCHEDULE AT '2025-06-30 03:00:00'
+ON COMPLETION NOT PRESERVE
+DO
+BEGIN
+    DELETE FROM resumen_ventas
+    WHERE fecha < CURRENT_DATE - INTERVAL 365 DAY;
+END;
+//
+
+DELIMITER ;
